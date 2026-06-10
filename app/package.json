@@ -1,0 +1,12 @@
+{
+  "name": "enterprise-hello-app",
+  "version": "1.0.0",
+  "description": "Simple Node.js app for enterprise EKS platform project",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.18.3"
+  }
+}
