@@ -22,3 +22,25 @@ module "vpc" {
 
   single_nat_gateway = true
 }
+
+module "ecr" {
+  source = "../../modules/ecr"
+
+  env = "dev"
+}
+
+module "eks" {
+  source = "../../modules/eks"
+
+  env             = "dev"
+  cluster_version = "1.31"
+
+  vpc_id          = module.vpc.vpc_id
+  private_subnets = module.vpc.private_subnets
+
+  instance_types = ["t3.medium"]
+
+  min_size     = 1
+  desired_size = 2
+  max_size     = 3
+}

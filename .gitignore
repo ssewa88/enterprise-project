@@ -1,20 +1,24 @@
-# Terraform
-.terraform/
+# Terraform local files
+**/.terraform/*
 *.tfstate
 *.tfstate.*
 crash.log
+crash.*.log
 
-# Terraform Variables
+# Terraform variable secrets
 *.tfvars
 *.tfvars.json
+
+# Terraform plan files
+*.tfplan
+plan.out
 
 # macOS
 .DS_Store
 
-# IDE
+# IDE folders
 .vscode/
 .idea/
 
-# Terraform Lock File
-# Keep this one
-#! .terraform.lock.hcl
+# Logs
+*.log
