@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ include "hello-app.fullname" . }}
+  name: {{ include "hello-app.fullname" . }}-active
   labels:
     {{- include "hello-app.labels" . | nindent 4 }}
 spec:
@@ -10,6 +10,23 @@ spec:
     {{- include "hello-app.selectorLabels" . | nindent 4 }}
   ports:
     - port: {{ .Values.service.port }}
+      targetPort: http
+      protocol: TCP
+      name: http
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "hello-app.fullname" . }}-preview
+  labels:
+    {{- include "hello-app.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.previewService.type }}
+  selector:
+    {{- include "hello-app.selectorLabels" . | nindent 4 }}
+  ports:
+    - port: {{ .Values.previewService.port }}
       targetPort: http
       protocol: TCP
       name: http

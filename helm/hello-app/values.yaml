@@ -20,6 +20,10 @@ service:
   port: 80
   targetPort: 3000
 
+previewService:
+  type: LoadBalancer
+  port: 80
+
 resources:
   requests:
     cpu: 100m
