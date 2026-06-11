@@ -19,7 +19,9 @@
         "ecr:PutImage",
         "ecr:UploadLayerPart",
         "ecr:DescribeRepositories",
-        "ecr:DescribeImages"
+        "ecr:DescribeImages",
+        "ecr:BatchGetImage",
+        "ecr:GetDownloadUrlForLayer"
       ],
       "Resource": "arn:aws:ecr:us-east-1:305601180466:repository/dev-hello-app"
     }
