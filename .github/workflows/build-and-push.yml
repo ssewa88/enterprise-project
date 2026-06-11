@@ -1,0 +1,70 @@
+name: Build and Push Image to ECR
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "app/**"
+      - ".github/workflows/build-and-push.yml"
+
+permissions:
+  id-token: write
+  contents: write
+
+env:
+  AWS_REGION: us-east-1
+  AWS_ACCOUNT_ID: "305601180466"
+  ECR_REPO: dev-hello-app
+  IMAGE_TAG: ${{ github.sha }}
+
+jobs:
+  build-and-push:
+    name: Build and push Docker image
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Configure AWS credentials with OIDC
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::305601180466:role/enterprise-project-github-actions-role
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Login to Amazon ECR
+        uses: aws-actions/amazon-ecr-login@v2
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v6
+        with:
+          context: ./app
+          platforms: linux/amd64
+          push: true
+          tags: |
+            ${{ env.AWS_ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com/${{ env.ECR_REPO }}:${{ env.IMAGE_TAG }}
+            ${{ env.AWS_ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com/${{ env.ECR_REPO }}:latest
+
+      - name: Update Helm image tag
+        run: |
+          sed -i "s/tag: .*/tag: $IMAGE_TAG/" helm/hello-app/values.yaml
+
+      - name: Commit updated Helm values
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+
+          git add helm/hello-app/values.yaml
+
+          if git diff --cached --quiet; then
+            echo "No Helm values changes to commit."
+          else
+            git commit -m "Update dev image tag to $IMAGE_TAG"
+            git push
+          fi
