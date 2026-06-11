@@ -1,0 +1,42 @@
+replicaCount: 2
+
+image:
+  repository: 305601180466.dkr.ecr.us-east-1.amazonaws.com/dev-hello-app
+  tag: v1
+  pullPolicy: IfNotPresent
+
+app:
+  environment: dev
+  version: v1
+
+serviceAccount:
+  create: true
+  automount: true
+  annotations: {}
+  name: ""
+
+service:
+  type: LoadBalancer
+  port: 80
+  targetPort: 3000
+
+resources:
+  requests:
+    cpu: 100m
+    memory: 128Mi
+  limits:
+    cpu: 300m
+    memory: 256Mi
+
+livenessProbe:
+  path: /health
+  initialDelaySeconds: 15
+  periodSeconds: 20
+
+readinessProbe:
+  path: /health
+  initialDelaySeconds: 5
+  periodSeconds: 10
+
+autoscaling:
+  enabled: false
