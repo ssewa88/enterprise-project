@@ -5,9 +5,9 @@ const PORT = process.env.PORT || 3000;
 
 app.get("/", (req, res) => {
   res.json({
-    message: "Hello from Green version v2 via Argo Rollouts!",
+    message: "Hello from the Enterprise EKS Platform via GitHub Actions!",
     environment: process.env.APP_ENV || "dev",
-    version: process.env.APP_VERSION || "v2",
+    version: process.env.APP_VERSION || "v1",
     status: "running"
   });
 });
