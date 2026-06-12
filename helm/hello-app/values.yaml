@@ -2,7 +2,7 @@ replicaCount: 2
 
 image:
   repository: 305601180466.dkr.ecr.us-east-1.amazonaws.com/dev-hello-app
-  tag: 20aadc9ef46e3d1714d395f4268ccff7c341d6fc
+  tag: 087101a59ac8dfc0e053e07f9fb28a6ffb4bf89d
   pullPolicy: IfNotPresent
 
 app:
